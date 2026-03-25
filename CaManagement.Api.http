@@ -1,0 +1,80 @@
+@host = http://localhost:5090
+
+### Swagger UI (Development)
+# Open in browser: {{host}}/swagger
+
+### Search clients (controller)
+GET {{host}}/api/clients?q=Indus&activeOnly=true
+Accept: application/json
+
+### Get client by id (seed: Indus)
+@indusClientId = 11111111-1111-1111-1111-111111111111
+GET {{host}}/api/clients/{{indusClientId}}
+Accept: application/json
+
+### Create client
+POST {{host}}/api/clients
+Content-Type: application/json
+
+{
+  "legalName": "Sample CA Client Pvt Ltd",
+  "tradeName": "SampleCo",
+  "taxIdentifier": "AABCS9999K",
+  "email": "cfo@sampleco.example",
+  "phone": "+91-11-5555-0000"
+}
+
+### Accounts for client (with computed balances)
+GET {{host}}/api/clients/{{indusClientId}}/accounts
+Accept: application/json
+
+### Search transactions (controller)
+GET {{host}}/api/transactions?clientId={{indusClientId}}&narration=fee
+Accept: application/json
+
+### Record single transaction (use a seed account id)
+@feesAccount = bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
+POST {{host}}/api/transactions
+Content-Type: application/json
+
+{
+  "accountId": "{{feesAccount}}",
+  "amount": 15000.00,
+  "direction": "Credit",
+  "narration": "Advisory engagement — compliance review",
+  "reference": "INV-POC-01",
+  "voucherNumber": "JV-POC"
+}
+
+### Simulated batch — rollback (data not persisted)
+POST {{host}}/api/transactions/batch
+Content-Type: application/json
+
+{
+  "commit": false,
+  "steps": [
+    {
+      "accountId": "{{feesAccount}}",
+      "amount": 1.00,
+      "direction": "Credit",
+      "narration": "Rollback demo line 1"
+    },
+    {
+      "accountId": "{{feesAccount}}",
+      "amount": 2.00,
+      "direction": "Credit",
+      "narration": "Rollback demo line 2"
+    }
+  ]
+}
+
+### Audit summary (controller)
+GET {{host}}/api/AuditReports/summary?from=2025-01-01&to=2026-12-31&clientId={{indusClientId}}
+Accept: application/json
+
+### Minimal API — search clients
+GET {{host}}/api/minimal/v1/clients?q=Harbor
+Accept: application/json
+
+### Minimal API — audit summary
+GET {{host}}/api/minimal/v1/audit/summary?from=2025-01-01&to=2026-12-31
