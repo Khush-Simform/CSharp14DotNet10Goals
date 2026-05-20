@@ -1,0 +1,83 @@
+name: Bug Report
+description: Report a defect in the CA Management API
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill in as much detail as possible.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected Area
+      description: Which part of the API is affected?
+      options:
+        - Clients
+        - Accounts
+        - Transactions / Ledger
+        - Audit Reports
+        - Batch / Simulated Transactions
+        - Minimal API endpoints
+        - Authentication / Authorization
+        - Swagger / OpenAPI
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Clear and concise description of what the bug is.
+      placeholder: "When I call POST /api/transactions with a valid payload, the response returns 500..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to Reproduce
+      description: Provide the HTTP request (cURL or .http file snippet) to reproduce the bug.
+      placeholder: |
+        1. POST /api/transactions
+           Body: { "accountId": "...", "amount": 25000, "direction": "Credit", "narration": "..." }
+        2. Expected: 200 OK with TransactionResponse
+        3. Actual: 500 Internal Server Error
+      render: http
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behaviour
+      placeholder: The transaction should be recorded and returned with a RiskHint.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behaviour
+      placeholder: A 500 error is returned with no details.
+    validations:
+      required: true
+
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: .NET version, OS, and any relevant configuration.
+      placeholder: ".NET 10 Preview 4, Windows 11, Development profile"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched for existing issues before opening this one.
+          required: true
+        - label: The bug is reproducible with a clean in-memory data store (seed data only).

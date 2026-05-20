@@ -1,0 +1,80 @@
+name: Feature Request
+description: Propose a new capability for the CA Management API
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to propose new features or improvements to the CA Management API.
+
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domain Area
+      options:
+        - Clients
+        - Accounts
+        - Transactions / Ledger
+        - Audit Reports
+        - Reporting & Analytics
+        - Batch Processing
+        - External Integrations
+        - Developer Experience (DX)
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Request Type
+      options:
+        - New API endpoint
+        - Enhanced validation
+        - New financial calculation / analytics
+        - Persistence (database integration)
+        - Performance improvement
+        - Security hardening
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? Reference a use case from the CA workflow.
+      placeholder: |
+        As a CA firm, we need to export ledger data grouped by GST classification
+        to generate GSTR-1 filings. Currently there is no endpoint for this.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature including expected API shape if relevant.
+      placeholder: |
+        Add GET /api/transactions/gst-summary?from=&to=&clientId=
+        returning grouped totals by GST rate bracket.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      placeholder: Could be implemented as a separate reporting microservice.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched for existing issues / discussions before opening this one.
+          required: true
