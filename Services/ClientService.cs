@@ -47,4 +47,24 @@ public sealed class ClientService(CaDataStore store, TimeProvider time) : IClien
         store.Mutate(s => s.Clients.Add(domain));
         return Task.FromResult(domain.ToResponse());
     }
+
+    public Task<ClientResponse> DeactivateAsync(Guid id, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var client = store.Query(s => s.Clients.FirstOrDefault(c => c.Id == id))
+            ?? throw new NotFoundException($"Client '{id}' was not found.");
+
+        if (!client.IsActive)
+            throw new ConflictException($"Client '{id}' is already inactive.");
+
+        store.Mutate(s =>
+        {
+            var target = s.Clients.First(c => c.Id == id);
+            target.IsActive = false;
+        });
+
+        var updated = store.Query(s => s.Clients.First(c => c.Id == id));
+        return Task.FromResult(updated.ToResponse());
+    }
 }

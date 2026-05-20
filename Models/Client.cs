@@ -9,5 +9,5 @@ public sealed class Client
     public required string Email { get; init; }
     public string? Phone { get; init; }
     public required DateOnly EngagementDate { get; init; }
-    public bool IsActive { get; init; } = true;
+    public bool IsActive { get; set; } = true;
 }

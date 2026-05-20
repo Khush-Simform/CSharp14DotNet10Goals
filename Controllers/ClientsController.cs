@@ -41,4 +41,18 @@ public sealed class ClientsController(IClientService clients) : ControllerBase
         var created = await clients.CreateAsync(request, cancellationToken);
         return CreatedAtAction(nameof(GetByIdAsync), new { id = created.Id }, created);
     }
+
+    /// <summary>Marks a client as inactive. Cannot be reversed via this API.</summary>
+    [HttpPatch("{id:guid}/deactivate")]
+    [SwaggerOperation(
+        Summary = "Deactivate a client",
+        Description = "Sets the client's IsActive flag to false. Returns 404 if the client does not exist, 409 if already inactive.")]
+    [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<ClientResponse>> DeactivateAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await clients.DeactivateAsync(id, cancellationToken);
+        return Ok(result);
+    }
 }

@@ -27,6 +27,7 @@ public sealed class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Ex
         var (status, title, detail) = ex switch
         {
             NotFoundException n => (HttpStatusCode.NotFound, "Resource not found", n.Message),
+            ConflictException c => (HttpStatusCode.Conflict, "Conflict", c.Message),
             DomainValidationException d => (HttpStatusCode.BadRequest, "Validation failed", d.Message),
             _ => (HttpStatusCode.InternalServerError, "Unexpected error", "An unexpected error occurred.")
         };
