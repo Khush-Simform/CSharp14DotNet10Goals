@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "mkdir -p logs && echo \"[$(date -u +%Y-%m-%dT%H:%M:%SZ)] TOOL_EXEC: $(cat)\" >> logs/tool-executions.log",
+        "powershell": "New-Item -ItemType Directory -Force -Path logs | Out-Null; $payload = $input | Out-String; Add-Content -Path logs/tool-executions.log -Value \"[$([datetime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ssZ'))] TOOL_EXEC: $($payload.Trim())\"",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "mkdir -p logs && echo \"[$(date -u +%Y-%m-%dT%H:%M:%SZ)] SESSION_START: $(cat)\" >> logs/session-audit.log",
+        "powershell": "New-Item -ItemType Directory -Force -Path logs | Out-Null; $payload = $input | Out-String; Add-Content -Path logs/session-audit.log -Value \"[$([datetime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ssZ'))] SESSION_START: $($payload.Trim())\"",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}
